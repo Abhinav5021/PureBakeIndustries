@@ -430,8 +430,8 @@
                 <div class="img-frame">
                     <div class="glass-sheen"></div>
                     
-                    <video id="baking-video" autoplay muted loop playsinline crossorigin="anonymous" preload="auto" poster="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&q=80&w=600">
-                        <source src="https://videos.pexels.com/video-files/4959737/4959737-hd_1080_1920_25fps.mp4" type="video/mp4">
+                    <video id="baking-video" autoplay muted loop playsinline preload="auto">
+                        <source src="baking.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
                     
@@ -511,36 +511,28 @@
             });
         });
 
-        // ADVANCED AUTOMATIC VIDEO KICKSTARTER
-        function launchOnlineVideo() {
+        // HARDWARE ACCELERATED LOCAL FILE PLAYBACK STRATEGY
+        window.addEventListener('DOMContentLoaded', () => {
             const video = document.getElementById('baking-video');
             
-            // Apply mandatory properties programmatically 
+            // Re-enforce policies dynamically
             video.muted = true;
             video.playsInline = true;
             
-            const attemptPlay = video.play();
+            const startPlay = video.play();
             
-            if (attemptPlay !== undefined) {
-                attemptPlay.then(() => {
-                    console.log("Online stream loaded and playing successfully.");
+            if (startPlay !== undefined) {
+                startPlay.then(() => {
+                    console.log("Local system video stream mounted and playing.");
                 }).catch(() => {
-                    console.log("Browser restriction detected. Standing by for interactive backup play.");
-                    
-                    // Fallback: If browser completely blocks it, start playing on the very first screen touch
+                    console.log("Browser safety restriction active. Intercepting via active document listener.");
+                    // Click backup safeguard
                     document.body.addEventListener('pointerdown', () => {
                         video.play();
                     }, { once: true });
                 });
             }
-        }
-
-        // Execute as fast as possible depending on load speed
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', launchOnlineVideo);
-        } else {
-            launchOnlineVideo();
-        }
+        });
     </script>
 </body>
 </html>
