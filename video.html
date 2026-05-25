@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Isolated Video Stream Tester</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: #120c10; /* Premium dark background */
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: sans-serif;
+            color: white;
+        }
+
+        .video-wrapper {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* Fallback Alert box - hidden by default, shown if video fails */
+        .fallback-ui {
+            position: absolute;
+            z-index: 2;
+            text-align: center;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            max-width: 90%;
+            width: 400px;
+            display: none; /* Controlled by JS */
+        }
+
+        .fallback-ui h3 {
+            margin-bottom: 10px;
+            color: #ff5286;
+        }
+
+        .fallback-ui p {
+            font-size: 0.9rem;
+            color: #ccc;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="video-wrapper">
+        <video id="test-video" autoplay muted loop playsinline preload="auto">
+            <source src="https://static.videezy.com/system/resources/previews/000/043/505/original/C0009_1.mp4" type="video/mp4">
+            <source src="https://videos.pexels.com/video-files/4959737/4959737-hd_1080_1920_25fps.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <div id="fallback-box" class="fallback-ui">
+            <h3>Video Stream Blocked</h3>
+            <p>Your browser layout works perfectly, but your network or browser security configuration is blocking external video links.</p>
+            <br>
+            <p style="font-size: 0.8rem; color: #ff5286;">💡 Tip: Try opening this file on your mobile phone using cellular data instead of Wi-Fi!</p>
+        </div>
+    </div>
+
+    <script>
+        const video = document.getElementById('test-video');
+        const fallback = document.getElementById('fallback-box');
+
+        // Force browser autoplay configurations
+        video.muted = true;
+        video.playsInline = true;
+
+        // Try playing immediately
+        video.play().then(() => {
+            console.log("Video playing successfully!");
+        }).catch((err) => {
+            console.log("Autoplay blocked. Registering touch listener.");
+            // If browser blocks autoplay, wake it up on the first click/tap
+            document.body.addEventListener('pointerdown', () => {
+                video.play();
+            }, { once: true });
+        });
+
+        // SAFETY WATCHDOG: If the video hasn't started playing within 3 seconds, 
+        // it means the URL stream is blocked by your network/ad-blocker.
+        setTimeout(() => {
+            if (video.currentTime === 0 || video.paused) {
+                fallback.style.display = 'block';
+            }
+        }, 3000);
+
+        // Hide fallback immediately if the video wakes up late
+        video.addEventListener('playing', () => {
+            fallback.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
